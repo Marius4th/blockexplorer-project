@@ -1,0 +1,43 @@
+@import "./vars.scss";
+
+.btn {
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        box-shadow: 0 0 4px $text-color2;
+    }
+}
+
+.code-block {
+    background-color: $back-color2;
+    border-radius: 5px;
+    padding: 7px !important;
+}
+
+.filler {
+    flex-grow: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.box-top {
+    position: absolute;
+    height: 10px;
+    background-color: #3c424f;
+    width: 100%;
+    top: 0;
+    transform: skewX(-45deg);
+    left: 5px;
+}
+
+.box-right {
+    position: absolute;
+    height: 100%;
+    background-color: #0d0e11;
+    width: 10px;
+    right: -10px;
+    transform: skewY(-45deg);
+    top: 5px;
+}
