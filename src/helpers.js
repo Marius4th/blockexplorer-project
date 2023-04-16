@@ -21,4 +21,26 @@ function parseWei(wei) {
     return (Math.round(Utils.formatEther(wei) * 1000000) / 1000000).toString().padEnd(8, '0') + ' Eth';
 }
 
-export { parseTimestamp, parseWei, WEI_ETH_VALUE };
+class PromisesCache {
+    constructor(maxItems) {
+        this.maxItems = maxItems;
+        this.cache = {};
+    }
+
+    async fetchData(key, dataRetriever) {
+        // Retrieve cached data
+        if (this.cache[key]) {
+            console.log('Using cache');
+            return this.cache[key];
+        }
+        else if (this.cache.length >= this.maxItems) delete this.cache[Object.keys(this.cache)[0]];
+
+        // Do new request
+        console.log('Using new data fetch');
+        const data = dataRetriever();
+        this.cache[key] = data;
+        return data;
+    }
+}
+
+export { parseTimestamp, parseWei, WEI_ETH_VALUE, PromisesCache };

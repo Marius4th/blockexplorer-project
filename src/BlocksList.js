@@ -35,7 +35,7 @@ class BlocksList extends React.Component {
         const txValTotal = blocks[k].transactions.reduce( (a, item) => BigInt(a) + BigInt(item.value._hex), BigInt(0) );
 
         items.push(
-          <div className='list-item' key={"bitem" + k}>
+          <div className='list-item' key={"bitem" + k} id={"bitem" + k}>
             <div className='item-header btn' onClick={() => this.props.goTo(blocks[k].hash)}>
               <span className='filler'><b>{blocks[k].number}</b>: {blocks[k].hash}</span>
               <span>{Math.round(Date.now() / 1000 - blocks[k].timestamp)} secs ago</span>

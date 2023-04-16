@@ -1,6 +1,6 @@
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import React from 'react';
-import {parseWei} from './helpers';
+import { parseWei, PromisesCache } from './helpers';
 
 /* global BigInt */
 
@@ -10,6 +10,8 @@ const settings = {
 };
 
 const alchemy = new Alchemy(settings);
+
+const dataCache = new PromisesCache(10);
 
 class TransactionData extends React.Component {
     constructor(props) {
@@ -23,7 +25,7 @@ class TransactionData extends React.Component {
 
     async getData(tx) {
         const ethersProvider = await alchemy.config.getProvider();
-        const data = await ethersProvider.getTransaction(tx);
+        const data = await dataCache.fetchData(tx, () => ethersProvider.getTransaction(tx));
         
         let items = [];
 
@@ -60,9 +62,9 @@ class TransactionData extends React.Component {
 
                 for(let ak in data[k]) {
                     const item = data[k][ak];
-                    const lis = item.storageKeys.reduce((a, akey) => a = [...a, <li>{akey}</li>], [])
+                    const lis = item.storageKeys.reduce((a, akey) => a = [...a, <li key={akey}>{akey}</li>], [])
                     value.push(
-                        <div><span>Address {item.address}:</span>
+                        <div key={item.address}><span>Address {item.address}:</span>
                         <ul>{lis}</ul></div>);
                 }
             }
@@ -103,10 +105,10 @@ class TransactionData extends React.Component {
 
 
             items.push(
-                <div className='data-itemh'>{k}</div>
+                <div id={k + 'h'} key={k + 'h'} className='data-itemh'>{k}</div>
             );
             items.push(
-                <div className={'data-itemv ' + extraClasses} onClick={clickFn}>{value}<em className='data-extra'>{extra}</em></div>
+                <div id={k + 'v'} key={k + 'v'} className={'data-itemv ' + extraClasses} onClick={clickFn}>{value}<em className='data-extra'>{extra}</em></div>
             );
         }
         

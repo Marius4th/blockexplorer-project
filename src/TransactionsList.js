@@ -1,6 +1,6 @@
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import React from 'react';
-import { parseWei, parseTimestamp } from './helpers';
+import { parseWei, parseTimestamp, PromisesCache } from './helpers';
 
 /* global BigInt */
 
@@ -12,6 +12,9 @@ const settings = {
 const alchemy = new Alchemy(settings);
 
 const ITEMS_SHOWN = 10;
+
+const txsCache = new PromisesCache(100);
+const blockDataCache = new PromisesCache(5);
 
 class TransactionsList extends React.Component {
     constructor(props) 
@@ -69,11 +72,11 @@ class TransactionsList extends React.Component {
       try {
         for(let k = startIndex; k < txs.length && k < startIndex + numItems; k++) {
           const ethersProvider = await alchemy.config.getProvider();
-          const fromBalance = await ethersProvider.getBalance(txs[k].from);
-          const toBalance = await ethersProvider.getBalance(txs[k].to);
+          const fromBalance = await txsCache.fetchData(txs[k].from, () => ethersProvider.getBalance(txs[k].from));
+          const toBalance = await txsCache.fetchData(txs[k].to, () => ethersProvider.getBalance(txs[k].to));
 
           items.push(
-            <div className='list-item' key={"titem" + k}>
+            <div className='list-item' key={"titem-" + k} id={"titem-" + k}>
               <div className='item-header btn' onClick={() => this.props.goToTx(txs[k].hash)}>
                 <span className='filler'><b>{txs[k].hash}</b></span>
                 <span>{time} ago</span>
@@ -115,7 +118,7 @@ class TransactionsList extends React.Component {
     {
       try {
         this.setState({ currentBlock: block });
-        this.data = await alchemy.core.getBlockWithTransactions(block);
+        this.data = await blockDataCache.fetchData(block, () => alchemy.core.getBlockWithTransactions(block));
         this.refreshList(this.data.transactions, 0, ITEMS_SHOWN);
       }
       catch(e) {

@@ -1,6 +1,7 @@
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import React from 'react';
-import {parseWei} from './helpers';
+import { parseWei, PromisesCache } from './helpers';
+import { isCompositeComponentWithType } from 'react-dom/test-utils';
 
 /* global BigInt */
 
@@ -10,6 +11,8 @@ const settings = {
 };
 
 const alchemy = new Alchemy(settings);
+
+const dataCache = new PromisesCache(10);
 
 class BlockData extends React.Component {
     constructor(props) {
@@ -23,7 +26,7 @@ class BlockData extends React.Component {
 
     async getData(block) {
         const ethersProvider = await alchemy.config.getProvider();
-        const data = await ethersProvider.getBlock(block);
+        const data = await dataCache.fetchData(block, () => ethersProvider.getBlock(block));
         
         let items = [];
 
@@ -67,10 +70,10 @@ class BlockData extends React.Component {
             }
 
             items.push(
-                <div className='data-itemh'>{k}</div>
+                <div id={'data-itemh-' + k} key={'data-itemh-' + k} className='data-itemh'>{k}</div>
             );
             items.push(
-                <div className={'data-itemv ' + extraClasses} onClick={clickFn}>{value}<em className='data-extra'>{extra}</em></div>
+                <div id={'data-itemv-' + k} key={'data-itemv-' + k} className={'data-itemv ' + extraClasses} onClick={clickFn}>{value}<em className='data-extra'>{extra}</em></div>
             );
         }
 

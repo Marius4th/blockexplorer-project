@@ -36,10 +36,10 @@ class AddressData extends React.Component {
 
         let items = [];
 
-        items.push( <div className='data-itemh'>Balance</div> );
-        items.push( <div className='data-itemv'>{parseWei(balance)}</div> );
-        items.push( <div className='data-itemh'>Code</div> );
-        items.push( <div className='data-itemv code-block'>{code}</div> );
+        items.push( <div className='data-itemh' id='balanceh' key='balanceh'>Balance</div> );
+        items.push( <div className='data-itemv' id='balancev' key='balancev'>{parseWei(balance)}</div> );
+        items.push( <div className='data-itemh' id='codeh' key='codeh'>Code</div> );
+        items.push( <div className='data-itemv code-block' id='codev' key='codev'>{code}</div> );
         
         this.setState({ items, currentAddress: addr });
         this.props.setLoadState(false);
