@@ -4,6 +4,22 @@ Example source: https://github.com/alchemyplatform/blockexplorer
 
 Exercise project of week 3 of Alchemy University Ethereum Dev. Bootcamp.
 
+The project includes sections for list of last 10 blocks, list of block's transactions, info of individual block, info of individual transaction and info of individual addresse.
+
+It uses Etherscan's API to fetch ABI info to try and parse transaction's data field.
+
+**Lastest Blocks Section**
+![Last 10 Blocks Section](./images/last-10-blocks.png)
+**Block Transactions Section**
+![Block Transactions Section](./images/block-transactions.png)
+**Transaction Info Section**
+![Transaction Info Section](./images/transaction-info.png)
+**Block Info Section**
+![Block Info Section](./images/block-info.png)
+**Address Info Section**
+![Address Info Section](./images/address-info.png)
+
+
 # Exercise Notes
 
 The lessons this week covered the Ethereum JSON-RPC API and the `ethers.js` library giving us the ability to query the Ethereum blockchain and make transactions!

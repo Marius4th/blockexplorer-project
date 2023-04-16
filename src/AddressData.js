@@ -28,7 +28,7 @@ class AddressData extends React.Component {
         
         await fetch("https://api.etherscan.io/api?module=contract&action=getabi&address=" + addr)
             .then(response => response.json()).then(responseJson => {
-                if (responseJson.result.startsWith('[')) code = responseJson.result;
+                if (responseJson.result.startsWith('[')) code = JSON.stringify(JSON.parse(responseJson.result), null, 2);
             })
             .catch(error => {
                 console.error(error);
@@ -39,7 +39,7 @@ class AddressData extends React.Component {
         items.push( <div className='data-itemh'>Balance</div> );
         items.push( <div className='data-itemv'>{parseWei(balance)}</div> );
         items.push( <div className='data-itemh'>Code</div> );
-        items.push( <div className='data-itemv'>{code}</div> );
+        items.push( <div className='data-itemv code-block'>{code}</div> );
         
         this.setState({ items, currentAddress: addr });
         this.props.setLoadState(false);

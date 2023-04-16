@@ -5,9 +5,7 @@ const WEI_ETH_VALUE = BigInt(1000000000000000000);
 
 // Converts from timestamp to how long ago it happend
 function parseTimestamp(tstamp) {
-    console.log(tstamp);
     const span = Date.now() / 1000 - tstamp;
-    console.log(span);
     if (span < 60) return Math.round(span).toString() + ' secs';
     else if (span / 60 < 60) return Math.round(span / 60).toString() + ' mins';
     else if (span / 60 / 60 < 60) return (Math.round(span / 60 / 60 * 10) / 10).toString() + ' hrs';

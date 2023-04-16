@@ -70,21 +70,24 @@ class TransactionData extends React.Component {
             else if (k === 'data' && data[k].length > 3) {
                 let codeAbi = '';
 
-                await fetch("https://api.etherscan.io/api?module=contract&action=getabi&address=" + data.to)
-                    .then(response => response.json()).then(responseJson => {
-                        codeAbi = responseJson.result;
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            
-                if (codeAbi != null && codeAbi.startsWith('[')) {
-                    const iface = new Utils.Interface(codeAbi);
-                    const decodedData = iface.parseTransaction({ data: data[k], value: data.value });
-                    
-                    value = JSON.stringify(decodedData, null, 2);
-                    extraClasses = 'code-block'
+                try {
+                    await fetch("https://api.etherscan.io/api?module=contract&action=getabi&address=" + data.to)
+                        .then(response => response.json()).then(responseJson => {
+                            codeAbi = responseJson.result;
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                
+                    if (codeAbi != null && codeAbi.startsWith('[')) {
+                        const iface = new Utils.Interface(codeAbi);
+                        const decodedData = iface.parseTransaction({ data: data[k], value: data.value });
+                        
+                        value = JSON.stringify(decodedData, null, 2);
+                        extraClasses = 'code-block'
+                    }
                 }
+                catch(e) { console.error(e); }
             }
             // Parse general data
             else {
