@@ -136,11 +136,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <div id="app-tabs">
-          <div className={this.state.selectedTab == TABS.LatestBlocks ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.LatestBlocks)}>Latest Blocks</div>
-          <div className={this.state.selectedTab == TABS.BlockTransactions ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.BlockTransactions)}>Block Transactions</div>
-          <div className={this.state.selectedTab == TABS.BlockData ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.BlockData)}>Block Data</div>
-          <div className={this.state.selectedTab == TABS.TransactionData ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.TransactionData)}>Transaction Data</div>
-          <div className={this.state.selectedTab == TABS.AddressData ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.AddressData)}>Address Data</div>
+          <div className={this.state.selectedTab === TABS.LatestBlocks ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.LatestBlocks)}>Latest Blocks</div>
+          <div className={this.state.selectedTab === TABS.BlockTransactions ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.BlockTransactions)}>Block Transactions</div>
+          <div className={this.state.selectedTab === TABS.BlockData ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.BlockData)}>Block Data</div>
+          <div className={this.state.selectedTab === TABS.TransactionData ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.TransactionData)}>Transaction Data</div>
+          <div className={this.state.selectedTab === TABS.AddressData ? "tab-btn selected-tab" : 'tab-btn'} onClick={() => this.changeTab(TABS.AddressData)}>Address Data</div>
         </div>
         <div id='app-content'>
           <div id='content-title'>{title}</div>

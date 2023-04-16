@@ -16,7 +16,7 @@ function parseTimestamp(tstamp) {
 
 // Converts from wei to more readable values like Gwei and Eth
 function parseWei(wei) {
-    if (wei == 0) return '0.'.padEnd(8, '0') + ' Wei';
+    if (wei === 0) return '0.000000' + ' Wei';
     if (parseInt(Utils.formatUnits(wei, 'gwei')) < 1000000) return (Math.round(Utils.formatUnits(wei, 'gwei') * 1000000) / 1000000).toString().padEnd(8, '0') + ' Gwei';
     return (Math.round(Utils.formatEther(wei) * 1000000) / 1000000).toString().padEnd(8, '0') + ' Eth';
 }

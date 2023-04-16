@@ -116,12 +116,12 @@ class TransactionData extends React.Component {
 
     componentDidMount() {
         if (!this.props.transaction) return;
-        if (this.props.transaction != this.state.currentTx) this.getData(this.props.transaction);
+        if (this.props.transaction !== this.state.currentTx) this.getData(this.props.transaction);
     }
 
     componentDidUpdate() {
         if (!this.props.transaction) return;
-        if (this.props.transaction != this.state.currentTx) this.getData(this.props.transaction);
+        if (this.props.transaction !== this.state.currentTx) this.getData(this.props.transaction);
     }
 
     render() {

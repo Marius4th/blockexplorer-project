@@ -125,12 +125,12 @@ class TransactionsList extends React.Component {
   
     componentDidMount() {
       //if (!this.props.block) return;
-      if (this.props.block != this.state.currentBlock) this.getBlockTxs(this.props.block);
+      if (this.props.block !== this.state.currentBlock) this.getBlockTxs(this.props.block);
     }
 
     componentDidUpdate() {
         //if (!this.props.block) return;
-        if (this.props.block != this.state.currentBlock) this.getBlockTxs(this.props.block);
+        if (this.props.block !== this.state.currentBlock) this.getBlockTxs(this.props.block);
     }
 
     render() {
