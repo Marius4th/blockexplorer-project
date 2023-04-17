@@ -58,14 +58,14 @@ html {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
 
-  #loading {
-    font-weight: bold;
-    font-size: 4em;
-    color: $text-color2;
+#loading {
+  font-weight: bold;
+  font-size: 3.5em;
+  color: $text-color2;
 
-    animation: flicker 2s linear infinite;
-  }
+  animation: flicker 2s linear infinite;
 }
 
 #app-tabs {
@@ -157,5 +157,19 @@ html {
 
   #app-tabs {
     grid-auto-flow: row !important;
+  }
+
+  .search-bar {
+    padding: 12px 0px;
+    column-gap: 14px;
+    row-gap: 8px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+
+    input {
+      max-width: none !important;
+    }
   }
 }

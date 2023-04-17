@@ -30,13 +30,11 @@ class PromisesCache {
     async fetchData(key, dataRetriever) {
         // Retrieve cached data
         if (this.cache[key]) {
-            console.log('Using cache');
             return this.cache[key];
         }
         else if (this.cache.length >= this.maxItems) delete this.cache[Object.keys(this.cache)[0]];
 
         // Do new request
-        console.log('Using new data fetch');
         const data = dataRetriever();
         this.cache[key] = data;
         return data;

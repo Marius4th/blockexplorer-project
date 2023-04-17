@@ -148,7 +148,7 @@ class App extends React.Component {
           {this.state.loading && <div id='loading'>LOADING...</div>}
           {tabContent}
         </div>
-        <div id='footer'>Designed & Created by Marius Ionut V. S.</div>
+        <div id='footer'>Designed & Coded by Marius Ionut V. S.</div>
       </div>
     );
   }
