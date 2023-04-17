@@ -19,17 +19,21 @@ class TransactionData extends React.Component {
 
         this.state = {
             items: [],
-            currentTx: 1,
             invalidInput: false
         }
+
+        this.currentTx = 1;
     }
 
     async getData(tx) {
+        this.currentTx = tx;
+        this.props.setLoadState(true);
         let items = [];
-
+        let data = null;
+        
         try {
             const ethersProvider = await alchemy.config.getProvider();
-            const data = await dataCache.fetchData(tx, () => ethersProvider.getTransaction(tx));
+            data = await dataCache.fetchData(tx, () => ethersProvider.getTransaction(tx));
             
             for (let k in data) {
                 let value = data[k];
@@ -112,21 +116,24 @@ class TransactionData extends React.Component {
                     <div id={k + 'v'} key={k + 'v'} className={'data-itemv ' + extraClasses} onClick={clickFn}>{value}<em className='data-extra'>{extra}</em></div>
                 );
             }
+
         }
         catch(e) { console.error(e); }
         
-        this.setState({ items, currentTx: tx, invalidInput: (items.length === 0) });
+        this.setState({ items, invalidInput: (items.length === 0) });
         this.props.setLoadState(false);
+        // if no data retrieved, try to use the hash to fetch block data instead
+        if (data === null) this.props.goToBlock(tx);
     }
 
     componentDidMount() {
         //if (!this.props.transaction) return;
-        if (this.props.transaction !== this.state.currentTx) this.getData(this.props.transaction);
+        if (this.props.transaction !== this.currentTx) this.getData(this.props.transaction);
     }
 
     componentDidUpdate() {
         //if (!this.props.transaction) return;
-        if (this.props.transaction !== this.state.currentTx && !this.state.invalidInput) this.getData(this.props.transaction);
+        if (this.props.transaction !== this.currentTx && !this.state.invalidInput) this.getData(this.props.transaction);
     }
 
     render() {

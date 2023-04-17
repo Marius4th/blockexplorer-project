@@ -15,12 +15,15 @@ class AddressData extends React.Component {
 
         this.state = {
             items: [],
-            currentAddress: 1,
             invalidInput: false
-        }
+        };
+
+        this.currentAddress = 1;
     }
 
     async getData(addr) {
+        this.currentAddress = addr;
+        this.props.setLoadState(true);
         let items = [];
 
         try {
@@ -39,7 +42,7 @@ class AddressData extends React.Component {
                 .catch(error => {
                     console.error(error);
                 });
-            console.log(foundAbi);
+                
             items.push( <div className='data-itemh' id='balanceh' key='balanceh'>Balance</div> );
             items.push( <div className='data-itemv' id='balancev' key='balancev'>{parseWei(balance)}</div> );
             items.push( <div className='data-itemh' id='codeh' key='codeh'>Code</div> );
@@ -47,18 +50,18 @@ class AddressData extends React.Component {
         }
         catch(e) { console.error(e); }
             
-        this.setState({ items, currentAddress: addr, invalidInput: (items.length === 0) });
+        this.setState({ items, invalidInput: (items.length === 0) });
         this.props.setLoadState(false);
     }
 
     componentDidMount() {
         //if (!this.props.address) return;
-        if (this.props.address !== this.state.currentAddress) this.getData(this.props.address);
+        if (this.props.address !== this.currentAddress) this.getData(this.props.address);
     }
 
     componentDidUpdate() {
         //if (!this.props.address) return;
-        if (this.props.address !== this.state.currentAddress && !this.state.invalidInput) this.getData(this.props.address);
+        if (this.props.address !== this.currentAddress && !this.state.invalidInput) this.getData(this.props.address);
     }
 
     render() {

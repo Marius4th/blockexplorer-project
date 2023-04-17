@@ -61,26 +61,26 @@ class App extends React.Component {
   }
 
   changeTab(tab) {
-    this.setState({selectedTab: tab, loading: true});
+    this.setState({selectedTab: tab});
   }
 
   goToTransaction(tx) {
-    this.setState({selectedTx: tx, loading: true});
+    this.setState({selectedTx: tx});
     this.changeTab(TABS.TransactionData);
   }
 
   goToTransactions(block) {
-    this.setState({selectedBlock: block, loading: true});
+    this.setState({selectedBlock: block});
     this.changeTab(TABS.BlockTransactions);
   }
 
   goToBlock(block) {
-    this.setState({selectedBlock: block, loading: true});
+    this.setState({selectedBlock: block});
     this.changeTab(TABS.BlockData);
   }
 
   goToAddress(addr) {
-    this.setState({selectedAddr: addr, loading: true});
+    this.setState({selectedAddr: addr});
     this.changeTab(TABS.AddressData);
   }
 

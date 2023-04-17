@@ -19,14 +19,17 @@ class BlockData extends React.Component {
 
         this.state = {
             items: [],
-            currentBlock: 1,
             invalidInput: false
         }
+
+        this.currentBlock = 1;
     }
 
     async getData(block) {
+        this.currentBlock = block;
+        this.props.setLoadState(true);
         let items = [];
-
+        
         try {
             const ethersProvider = await alchemy.config.getProvider();
             const data = await dataCache.fetchData(block, () => ethersProvider.getBlock(block));
@@ -80,18 +83,18 @@ class BlockData extends React.Component {
         }
         catch(e) { console.error(e); }
         
-        this.setState({ items, currentBlock: block, invalidInput: (items.length === 0) });
+        this.setState({ items, invalidInput: (items.length === 0) });
         this.props.setLoadState(false);
     }
 
     componentDidMount() {
         //if (!this.props.block) return;
-        if (this.props.block !== this.state.currentBlock) this.getData(this.props.block);
+        if (this.props.block !== this.currentBlock) this.getData(this.props.block);
     }
 
     componentDidUpdate() {
         //if (!this.props.block) return;
-        if (this.props.block !== this.state.currentBlock && !this.state.invalidInput) this.getData(this.props.block);
+        if (this.props.block !== this.currentBlock && !this.state.invalidInput) this.getData(this.props.block);
     }
 
     render() {

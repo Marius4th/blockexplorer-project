@@ -21,12 +21,12 @@ class TransactionsList extends React.Component {
   
       this.state = {
         items: [],
-        currentBlock: 1,
-        dataIndex: 0,
         loading: false,
         invalidInput: false
       };
-  
+      
+      this.dataIndex = 0;
+      this.currentBlock = 1;
       this.data = {};
 
       this.getBlocks = this.getBlockTxs.bind(this);
@@ -38,23 +38,20 @@ class TransactionsList extends React.Component {
     }
   
     loadOthers(offset) {
-      const newIndex = this.state.dataIndex + offset;
-      this.setState({dataIndex: Math.max(0, newIndex)});
+      const newIndex = Math.max(0, this.dataIndex + offset);
       this.refreshList(this.data.transactions, newIndex, ITEMS_SHOWN);
       window.scrollTo(0, 0); 
     }
 
     loadMore() {
       this.setLoadingExtra(true)
-      const newIndex = Math.max(0, this.state.dataIndex + ITEMS_SHOWN);
-      this.setState({dataIndex: Math.max(0, newIndex)});
+      const newIndex = Math.max(0, this.dataIndex + ITEMS_SHOWN);
       this.refreshList(this.data.transactions, newIndex, ITEMS_SHOWN, true).then(() => this.setLoadingExtra(false));
     }
 
     loadAll() {
       this.setLoadingExtra(true)
-      const newIndex = this.state.dataIndex + ITEMS_SHOWN;
-      this.setState({dataIndex: Math.max(0, newIndex)});
+      const newIndex = Math.max(0, this.dataIndex + ITEMS_SHOWN);
       this.refreshList(this.data.transactions, newIndex, this.data.transactions.length, true).then(() => this.setLoadingExtra(false));
     }
 
@@ -63,6 +60,7 @@ class TransactionsList extends React.Component {
     }
 
     async refreshList(txs, startIndex, numItems, add=false) {
+      this.dataIndex = startIndex;
       let items = add ? [...this.state.items] : [];
       const time = parseTimestamp(parseInt(this.data.timestamp));
 
@@ -115,29 +113,33 @@ class TransactionsList extends React.Component {
   
     async getBlockTxs(block) 
     {
+      this.currentBlock = block;
+      this.props.setLoadState(true);
+      
       try {
-        this.setState({ currentBlock: block });
         this.data = await blockDataCache.fetchData(block, () => alchemy.core.getBlockWithTransactions(block));
         this.refreshList(this.data.transactions, 0, ITEMS_SHOWN);
       }
       catch(e) {
         console.error(e);
+        this.props.setLoadState(false);
       }
     }
   
     componentDidMount() {
       //if (!this.props.block) return;
-      if (this.props.block !== this.state.currentBlock) this.getBlockTxs(this.props.block);
+      if (this.props.block !== this.currentBlock) this.getBlockTxs(this.props.block);
     }
 
     componentDidUpdate() {
         //if (!this.props.block) return;
-        if (this.props.block !== this.state.currentBlock && !this.state.invalidInput) this.getBlockTxs(this.props.block);
+        if (this.props.block !== this.currentBlock && !this.state.invalidInput) this.getBlockTxs(this.props.block);
     }
 
     render() {
-      const startIndex = this.state.dataIndex;
-      const lastIndex = this.state.dataIndex + this.state.items.length;
+      const startIndex = this.dataIndex;
+      const lastIndex = this.dataIndex + this.state.items.length;
+
       return (
         <div id="transactions-list">
           {this.state.items}
