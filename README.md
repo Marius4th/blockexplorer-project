@@ -4,6 +4,8 @@ Example source: https://github.com/alchemyplatform/blockexplorer
 
 Exercise project of week 3 of Alchemy University Ethereum Dev. Bootcamp.
 
+Live demo: https://ethexplorer.marivsonthe.net
+
 The project includes sections for list of last 10 blocks, list of block's transactions, info of individual block, info of individual transaction and info of individual addresse.
 
 It uses Etherscan's API to fetch ABI info to try and parse transaction's data field.
