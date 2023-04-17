@@ -1,10 +1,10 @@
 @import "./vars.scss";
 
-#blocks-list,
-#transactions-list {
+#blocks-list, #transactions-list {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 10px;
+    padding: 16px 0;
 }
 
 .list-item {

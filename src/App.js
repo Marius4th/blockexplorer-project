@@ -1,4 +1,4 @@
-import { Alchemy, Network, Utils } from 'alchemy-sdk';
+//import { Alchemy, Network } from 'alchemy-sdk';
 import React from 'react';
 
 import './styles/app.scss';
@@ -13,19 +13,17 @@ import BlockData from './BlockData';
 import AddressData from './AddressData';
 import SearchBar from './SearchBar';
 
-/* global BigInt */
-
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
 // level code.
-const settings = {
+/*const settings = {
   apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
   network: Network.ETH_MAINNET,
-};
+};*/
 
 // You can read more about the packages here:
 // https://docs.alchemy.com/reference/alchemy-sdk-api-surface-overview#api-surface
-const alchemy = new Alchemy(settings);
+//const alchemy = new Alchemy(settings);
 
 const TABS = {
   LatestBlocks: 0,
@@ -42,9 +40,9 @@ class App extends React.Component {
     this.state = {
       loading: true,
       selectedTab: TABS.LatestBlocks,
-      selectedTx: 0,
+      selectedTx: null,
       selectedBlock: null,
-      selectedAddr: 0,
+      selectedAddr: null,
       searchStr: ''
     };
 
@@ -98,7 +96,7 @@ class App extends React.Component {
       else if (str.length === 42) this.goToAddress(str);
     }
     // Block Number
-    else this.goToBlock(parseInt(str));
+    else this.goToBlock(parseInt(str) || 0);
     
     e.preventDefault();
     return false;
@@ -116,19 +114,19 @@ class App extends React.Component {
         break;
       case TABS.BlockTransactions: 
         tabContent = <TransactionsList setLoadState={this.setLoadState} block={this.state.selectedBlock} goToTx={this.goToTransaction} goToBlock={this.goToBlock} goToAddress={this.goToAddress}/>; 
-        title = "Transactions of " + this.state.selectedBlock;
+        title = "Transactions of " + (this.state.selectedBlock === null ? 'first block' : this.state.selectedBlock);
         break;
       case TABS.TransactionData: 
         tabContent = <TransactionData setLoadState={this.setLoadState} transaction={this.state.selectedTx} goToBlock={this.goToBlock} goToAddress={this.goToAddress}/>; 
-        title = "Data of " + this.state.selectedTx;
+        title = "Data of " + (this.state.selectedTx === null ? 'invalid hash!' : this.state.selectedTx);
         break;
       case TABS.BlockData: 
         tabContent = <BlockData setLoadState={this.setLoadState} block={this.state.selectedBlock} goToBlock={this.goToBlock} goToTxs={this.goToTransactions} goToAddress={this.goToAddress}/>; 
-        title = "Data of " + this.state.selectedBlock;
+        title = "Data of " + (this.state.selectedBlock === null ? 'first block' : this.state.selectedBlock);
         break;
         case TABS.AddressData: 
           tabContent = <AddressData setLoadState={this.setLoadState} address={this.state.selectedAddr}/>; 
-          title = "Data of " + this.state.selectedAddr;
+          title = "Data of " + (this.state.selectedAddr === null ? 'invalid address!' : this.state.selectedAddr);
           break;
       default: tabContent = <BlocksList/>;
     }
@@ -145,7 +143,7 @@ class App extends React.Component {
         <div id='app-content'>
           <div id='content-title'>{title}</div>
           <SearchBar value={this.state.searchStr} onSubmit={e => this.search(e, this.state.searchStr)} handleChange={this.handleSearchInput} placeholder={'Input a Block Number, Transaction Hash or Address'}/>
-          {this.state.loading && <div id='loading'>LOADING...</div>}
+          {this.state.loading && <div className='loading'>LOADING...</div>}
           {tabContent}
         </div>
         <div id='footer'>Designed & Coded by Marius Ionut V. S.</div>

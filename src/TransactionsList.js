@@ -2,8 +2,6 @@ import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import React from 'react';
 import { parseWei, parseTimestamp, PromisesCache } from './helpers';
 
-/* global BigInt */
-
 const settings = {
     apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
     network: Network.ETH_MAINNET,
@@ -14,7 +12,7 @@ const alchemy = new Alchemy(settings);
 const ITEMS_SHOWN = 10;
 
 const txsCache = new PromisesCache(100);
-const blockDataCache = new PromisesCache(5);
+const blockDataCache = new PromisesCache(8);
 
 class TransactionsList extends React.Component {
     constructor(props) 
@@ -25,7 +23,8 @@ class TransactionsList extends React.Component {
         items: [],
         currentBlock: 1,
         dataIndex: 0,
-        loading: false
+        loading: false,
+        invalidInput: false
       };
   
       this.data = {};
@@ -110,7 +109,7 @@ class TransactionsList extends React.Component {
       }
       catch(e) {console.error(e);}
 
-      this.setState({ items });
+      this.setState({ items, invalidInput: (items.length === 0) });
       this.props.setLoadState(false);
     }
   
@@ -133,7 +132,7 @@ class TransactionsList extends React.Component {
 
     componentDidUpdate() {
         //if (!this.props.block) return;
-        if (this.props.block !== this.state.currentBlock) this.getBlockTxs(this.props.block);
+        if (this.props.block !== this.state.currentBlock && !this.state.invalidInput) this.getBlockTxs(this.props.block);
     }
 
     render() {
@@ -142,7 +141,8 @@ class TransactionsList extends React.Component {
       return (
         <div id="transactions-list">
           {this.state.items}
-          {this.state.loading && <div id='loading'>LOADING...</div>}
+          {this.state.invalidInput && <div className='invalid'>ERROR OR INVALID BLOCK!</div>}
+          {this.state.loading && <div className='loading'>LOADING...</div>}
           <div id='list-nav-showing'>Showing {startIndex + 1} - {lastIndex|| ITEMS_SHOWN}{ this.data.transactions && ' (' + this.data.transactions.length + ')'}</div>
           <div id='list-nav'>
             {this.state.dataIndex > 0 && <div className='btn list-nav-btn' onClick={() => this.loadOthers(-ITEMS_SHOWN)}>&lt;</div>}

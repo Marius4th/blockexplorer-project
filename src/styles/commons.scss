@@ -13,7 +13,8 @@
     background-color: $back-color2;
     border-radius: 5px;
     padding: 7px !important;
-    overflow-y: auto;
+    overflow: auto !important;
+    white-space: pre;
 }
 
 .filler {
@@ -22,6 +23,24 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.loading {
+    font-weight: bold;
+    font-size: 3.5em;
+    color: $text-color2;
+    text-align: center;
+    width: 100%;
+    grid-column: 1 / 20;
+    flex-grow: 1;
+
+    animation: flicker 2s linear infinite;
+}
+
+.invalid {
+    @extend .loading;
+    font-size: 2.5em;
+    color: #f60;
+}  
 
 .box-top {
     position: absolute;

@@ -15,38 +15,13 @@ html {
   box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 #app-content {
   position: relative;
   background-color: $back-color;
   padding: 10px;
   z-index: 4;
   box-shadow: 8px -8px 0 #0016;
+  min-height: 50vh;
 
   #content-title {
     color: green;
@@ -58,14 +33,6 @@ html {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-}
-
-#loading {
-  font-weight: bold;
-  font-size: 3.5em;
-  color: $text-color2;
-
-  animation: flicker 2s linear infinite;
 }
 
 #app-tabs {

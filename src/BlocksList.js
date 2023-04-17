@@ -1,6 +1,6 @@
-import { Alchemy, Network, Utils } from 'alchemy-sdk';
+import { Alchemy, Network } from 'alchemy-sdk';
 import React from 'react';
-import { parseWei } from './helpers';
+import { parseWei, PromisesCache } from './helpers';
 
 /* global BigInt */
 
@@ -11,20 +11,23 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 
+const blocksCache = new PromisesCache(10);
+
 class BlocksList extends React.Component {
     constructor(props) 
     {
       super(props);
   
       this.state = {
-        items: []
+        items: [],
+        errorLoading: false
       };
   
       this.getBlocks = this.getBlocks.bind(this);
       this.buildList = this.buildList.bind(this);
     }
+
     buildList(blocks) {
-        console.log(blocks);
       let items = [];
   
       for(let k in blocks) {
@@ -66,7 +69,7 @@ class BlocksList extends React.Component {
           </div>);
       }
   
-      this.setState({ items });
+      this.setState({ items, errorLoading: (items.length === 0) });
     }
   
     async getBlocks() 
@@ -74,9 +77,10 @@ class BlocksList extends React.Component {
       const blocks = [];
       try {
         let blockNum = await alchemy.core.getBlockNumber();
-  
+        const dataFetcher = () => blocksCache.fetchData(blockNum, () => alchemy.core.getBlockWithTransactions(blockNum));
+
         for (let i=0; i<10; i++) {
-          const blockData = await alchemy.core.getBlockWithTransactions(blockNum);
+          const blockData = await dataFetcher();
           blockNum--;
           blocks.push(blockData);
         }
@@ -85,6 +89,7 @@ class BlocksList extends React.Component {
         this.props.setLoadState(false);
       }
       catch(e) {
+        this.setState({ errorLoading: true });
         console.error(e);
       }
     }
@@ -98,7 +103,8 @@ class BlocksList extends React.Component {
     {
       return (
         <div id="blocks-list">
-          {this.state.items}
+            {this.state.errorLoading && <div className='invalid'>SOMETHING WENT WRONG!</div>}
+            {this.state.items}
         </div>
       );
     }
